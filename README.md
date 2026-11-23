@@ -1,51 +1,109 @@
-# Network Monitoring with Zeek — SOC Investigation & Detection Tuning
+# SOC Investigation Portfolio
 
-**Hands-on forensic case study | TryHackMe lab | November 2026**
+A collection of hands-on security investigations, threat intelligence exercises, and network forensics labs.
 
-> This repository documents a controlled training-lab investigation. The IP addresses, domains, hashes, and conclusions below are observations from the supplied lab artifacts, not independently verified real-world threat attributions. No packet captures or live traffic are redistributed.
+This repository documents my practical work with security monitoring tools, log analysis, incident investigation, and detection engineering. I use these exercises to strengthen my understanding of how security incidents develop, how evidence can be correlated across different sources, and how analysts can distinguish suspicious activity from legitimate system behaviour.
 
-## Overview
+My focus is on understanding the investigation process, not simply arriving at the correct answer. Each case study includes the tools used, investigation steps, findings, and lessons learned.
 
-We investigated suspicious SMB connection attempts, repeated HTTPS traffic, DNS TXT queries, an HTTP upload, TLS metadata, file masquerading, and hash-based threat intelligence. We then tuned a Zeek DNS detection script to suppress legitimate DNS validation traffic while retaining suspicious notices.
+## Investigations
 
-**Highlights:** 23 baseline notices → **10** after suppressing `10.0.0.53` (13 fewer, **56.5%** reduction). The original source distribution was 13 notices for `10.0.0.53` and 10 for `10.14.22.88`. The final count of 10 was accepted by the lab; the screenshot set documents the baseline and debugging, but does **not** contain a terminal screenshot of the successful final tuned run.
+### 1. Network Monitoring with Zeek
 
-## Repository contents
+**Focus:** Network forensics, traffic analysis, data exfiltration, and detection tuning  
+**Tools:** Zeek, Linux, Bash, PCAP analysis  
+**Environment:** TryHackMe
 
-- [Full investigation walkthrough](INVESTIGATION.md) — questions, commands, verified outputs, forensic interpretation, and troubleshooting.
-- [Evidence index](EVIDENCE.md) — 24 original terminal screenshots, organized by investigation step.
-- [Command cheat sheet](COMMANDS.md) — reusable Zeek commands and cross-log pivots.
-- [`screenshots/`](screenshots/) — the original screenshots used during the exercise.
+Investigated suspicious network activity using Zeek connection, DNS, HTTP, TLS, and file analysis logs.
 
-## Incident snapshot
+The investigation covered:
 
-| Artifact | Observation |
+- Repeated outbound HTTPS connections and possible C2 beaconing.
+- DNS tunnelling indicators involving unusually long TXT queries.
+- HTTP POST activity associated with a suspicious file upload.
+- File extension and MIME type mismatches.
+- SHA256 hash correlation with a local threat intelligence feed.
+- Detection script tuning to suppress legitimate DNS server activity.
+
+One of the practical exercises involved reducing Zeek notices from 23 to 10 by excluding known legitimate DNS validation traffic while retaining notices associated with the suspicious host.
+
+**[View investigation](Zeek-Network-Forensics/README.md)**
+
+---
+
+### 2. Trooper: Unmasking APT X
+
+**Focus:** Threat intelligence and adversary profiling  
+**Environment:** TryHackMe
+
+Investigated an advanced persistent threat using threat intelligence sources to examine its activities, associated malware, infrastructure, and attack techniques.
+
+The exercise involved identifying:
+
+- Phishing techniques associated with the threat actor.
+- Known vulnerabilities exploited during attacks.
+- Malware and remote access tools linked to the group.
+- Persistence mechanisms and suspicious registry modifications.
+- Relevant MITRE ATT&CK techniques.
+
+The investigation helped me practise connecting individual indicators and techniques to a broader adversary profile.
+
+**[View investigation](Trooper-Unmasking-APT-X/)**
+
+---
+
+### 3. Finance Trail — Security Investigation
+
+**Focus:** Incident investigation and forensic analysis  
+**Tools:** Splunk, Sysmon, Suricata
+
+A practical investigation involving suspicious activity in a financial environment.
+
+The case study covers the use of security telemetry to reconstruct attacker activity, correlate events across different log sources, and establish an evidence-based timeline.
+
+Particular attention was given to process execution, file creation, network activity, and the movement of data between systems.
+
+**[View case study](finance-trail-case-study.md)**
+
+---
+
+## Tools and Technical Areas
+
+| Area | Tools and techniques |
 |---|---|
-| Suspicious source | `10.14.22.88` |
-| Repeated HTTPS destination | `194.165.16.56` (`update.softpatch-cdn.com`) |
-| Last observed matching TCP/443 timestamp | `1763092746.812696` |
-| TLS sessions to destination with missing SNI | **82** |
-| Long DNS queries | **18** `TXT` queries to `exfil-channel.net` |
-| HTTP exfiltration destination | `185.213.154.201` (`backup.corpfiles-sync.com`) |
-| POST | `03:15:07 UTC`, `/upload/data` |
-| HTTP request body | **5,348,721 bytes** |
-| Originator application bytes | **5,348,913 bytes** (difference **192**) |
-| Uploaded filename | `backup_archive.zip` |
-| Threat-feed family label | `CobaltStrikeStager` (local feed, high confidence) |
-| Disguised file | `invoice_march.pdf` → `application/x-dosexec` |
-| HTTP responder body | **7 bytes** (confirmed via `http.log`) |
-| Detection baseline → tuned | **23 → 10** notices |
+| SIEM and log analysis | Splunk, Elastic |
+| Network monitoring | Zeek, Wireshark, Suricata |
+| Endpoint investigation | Sysmon, Windows event logs |
+| Threat intelligence | OpenCTI, MISP, MITRE ATT&CK |
+| Operating systems | Linux, Windows |
+| Scripting and investigation | Bash, SPL, Zeek scripting |
+| Security operations | Incident triage, IOC analysis, event correlation, detection tuning |
 
-## Investigation method
+These reflect tools and techniques I have worked with through practical exercises and technical training. My proficiency varies across them, and I continue to build experience through additional investigations.
 
-`conn.log` → `dns.log` → `http.log` / `ssl.log` → `files.log` → local threat feed → custom Zeek notice script.
+## Investigation Approach
 
-Use Zeek's **`uid`** to correlate connection and HTTP events, and file **`conn_uids`** where present. DNS name-to-IP mapping requires matching the `answers` field, not merely picking the closest query timestamp.
+Although each case is different, I generally follow a similar process:
 
-## Reproducing
+1. **Understand the scenario.** Identify the reported activity, available evidence, and questions that need answering.
+2. **Establish a baseline.** Review normal activity and identify unusual connections, processes, authentication events, or file operations.
+3. **Investigate the evidence.** Use relevant queries and tools to narrow down suspicious events.
+4. **Correlate findings.** Compare timestamps, hosts, connection identifiers, and other indicators across available logs.
+5. **Validate conclusions.** Check that findings are supported by the evidence and distinguish confirmed activity from assumptions.
+6. **Document the investigation.** Record useful commands, findings, unsuccessful approaches, and lessons learned.
 
-The training environment used `/home/ubuntu` as the working directory, with `logs/`, `pcaps/finance-sensor.pcap`, `scripts/dns_notice.zeek`, and `threat-feed.csv`. Those lab files are **not** included here. Commands in this repository assume access to the same authorized lab environment.
+I also document commands that initially fail when the troubleshooting process offers something worth learning.
 
-## Ethical scope
+## About Me
 
-All observations are from a security-training environment. Do not interpret this repository as evidence against the real-world owners of the example IP addresses or domains.
+I have a background in Information Technology, including IT support, systems administration, and information security.
+
+My experience supporting users and troubleshooting technical issues has influenced how I approach security investigations: establish what happened, examine the available evidence, and work methodically towards an explanation.
+
+I am currently building my practical experience in security operations, incident response, threat intelligence, and digital forensics through structured labs and independent study.
+
+This repository will continue to grow as I complete and document additional investigations.
+
+---
+
+*The investigations in this repository were conducted in authorized training and lab environments. Findings relate to the supplied scenarios and datasets unless otherwise stated.*
