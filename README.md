@@ -14,7 +14,7 @@ My focus is on understanding the investigation process, not simply arriving at t
 | [Threat Hunting with Zui](Zui-Threat-Hunting/) | Zui, Zeek, Zed | Beaconing, exfiltration and lateral movement |
 | [Advanced Packet Analysis](advanced-packet-analysis/) | Wireshark, TShark, OpenSSL | Packet analysis and forensic evidence extraction |
 | [Trooper: Unmasking APT X](Trooper-Unmasking-APT-X/) | OpenCTI, MITRE ATT&CK | Threat intelligence and adversary profiling |
-| [Finance Trail](finance-trail-case-study.md) | Splunk, Sysmon, Suricata | Incident investigation and attack reconstruction |
+| [Finance Trail](finance-trail/README.md) | Splunk, Sysmon, Suricata | Incident investigation and attack reconstruction |
 
 ## Selected Investigation Findings
 
@@ -153,7 +153,7 @@ Particular attention was given to:
 - Data movement between systems.
 - Timestamp correlation across endpoint and network logs.
 
-**[View case study](finance-trail-case-study.md)**
+**[View case study](finance-trail/README.md)**
 
 ---
 
