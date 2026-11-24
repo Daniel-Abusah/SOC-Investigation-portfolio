@@ -32,7 +32,7 @@ One of the practical exercises involved reducing Zeek notices from 23 to 10 by e
 ---
 
 
-### Threat Hunting with Zui
+### 2. Threat Hunting with Zui
 
 Investigated suspicious network activity using Zui and Zeek logs, focusing on C2 beaconing, data exfiltration and potential lateral movement. Used iterative queries and protocol correlation to identify suspicious connections, investigate large outbound transfers and assess false positives.
 
@@ -42,12 +42,27 @@ Investigated suspicious network activity using Zui and Zeek logs, focusing on C2
 
 [View Investigation](./Zui-Threat-Hunting/)
 
+---
+
+### 3. Advanced Packet Analysis & Network Forensics
+
+Conducted a packet-level investigation using Wireshark and TShark to identify network reconnaissance, C2 beaconing, reverse shell activity, disguised malware and data exfiltration.
+
+Extracted forensic artifacts, correlated file hashes with threat intelligence, analysed TLS certificates and JA4 fingerprints, investigated DNS tunnelling, and automated IoC extraction using Bash.
+
+**Tools:** Wireshark, TShark, OpenSSL, Bash, Linux
+
+**Skills:** Network Forensics, Malware Identification, Threat Hunting, Threat Intelligence, Incident Investigation and Automated IoC Extraction.
+
+[View Investigation](./advanced-packet-analysis/)
 
 
 
 
 
-### 2. Trooper: Unmasking APT X
+---
+
+### 4. Trooper: Unmasking APT X
 
 **Focus:** Threat intelligence and adversary profiling  
 **Environment:** TryHackMe
@@ -68,7 +83,7 @@ The investigation helped me practise connecting individual indicators and techni
 
 ---
 
-### 3. Finance Trail — Security Investigation
+### 5. Finance Trail — Security Investigation
 
 **Focus:** Incident investigation and forensic analysis  
 **Tools:** Splunk, Sysmon, Suricata
