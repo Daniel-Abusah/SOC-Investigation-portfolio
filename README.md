@@ -31,6 +31,22 @@ One of the practical exercises involved reducing Zeek notices from 23 to 10 by e
 
 ---
 
+
+### Threat Hunting with Zui
+
+Investigated suspicious network activity using Zui and Zeek logs, focusing on C2 beaconing, data exfiltration and potential lateral movement. Used iterative queries and protocol correlation to identify suspicious connections, investigate large outbound transfers and assess false positives.
+
+**Tools:** Zui, Zeek, Zed Query Language
+
+**Skills:** Threat Hunting, Network Traffic Analysis, C2 Detection, Data Exfiltration Analysis and Evidence Correlation.
+
+[View Investigation](./Zui-Threat-Hunting/)
+
+
+
+
+
+
 ### 2. Trooper: Unmasking APT X
 
 **Focus:** Threat intelligence and adversary profiling  
